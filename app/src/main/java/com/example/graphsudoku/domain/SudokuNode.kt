@@ -5,7 +5,7 @@ import java.io.Serializable
 data class SudokuNode(
     val x: Int,
     val y: Int,
-    val color: Int = 0,
+    var color: Int = 0,
     val readOnly: Boolean = true
 ) : Serializable {
     override fun hashCode(): Int {

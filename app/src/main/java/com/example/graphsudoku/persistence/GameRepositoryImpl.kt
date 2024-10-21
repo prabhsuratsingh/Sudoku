@@ -116,8 +116,8 @@ class GameRepositoryImpl(
     override suspend fun getSettings(onSuccess: (Settings) -> Unit, onError: (Exception) -> Unit) {
         when(val getSettingsResult = settingsStorage.getSettings()) {
             SettingsStorageResult.OnComplete -> TODO()
-            is SettingsStorageResult.OnSuccess -> TODO()
-            is SettingsStorageResult.OnError -> TODO()
+            is SettingsStorageResult.OnSuccess -> onSuccess(getSettingsResult.settings)
+            is SettingsStorageResult.OnError -> onError(getSettingsResult.exception)
         }
     }
 
@@ -126,6 +126,7 @@ class GameRepositoryImpl(
         onSuccess: (Unit) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        settingsStorage.updateSettings(settings)
+        onSuccess(Unit)
     }
 }

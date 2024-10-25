@@ -2,6 +2,7 @@ package com.example.graphsudoku.ui.activegame
 
 import com.example.graphsudoku.domain.Difficulty
 import com.example.graphsudoku.domain.SudokuPuzzle
+import com.example.graphsudoku.domain.getHash
 
 class ActiveGameViewModel {
     internal val subBoardState: ((HashMap<Int, SudokuTile>) -> Unit)? = null
@@ -55,6 +56,41 @@ class ActiveGameViewModel {
         subIsCompleteState?.invoke(isCompleteState)
         subContentState?.invoke(contentState)
         subBoardState?.invoke(boardState)
+    }
+
+    internal fun updateBoardState(
+        x: Int,
+        y: Int,
+        value: Int,
+        hasFocus: Boolean
+    ) {
+        boardState[getHash(x,y)]?.let {
+            it.value = value,
+            it.hasFocus = hasFocus
+        }
+
+        subBoardState?.invoke(boardState)
+    }
+
+    internal fun showLoadingState() {
+        subContentState?.invoke(ActiveGameScreenState.LOADING)
+    }
+
+    internal fun updateFocusState(
+        x: Int,
+        y: Int
+    ) {
+        boardState.values.forEach {
+            if(it.x == x && it.y == y) it.hasFocus = true
+            else it.hasFocus = false
+        }
+
+        subBoardState?.invoke(boardState)
+    }
+
+    fun updateCompleteScreen() {
+        isCompleteState = true
+        subContentState?.invoke(ActiveGameScreenState.COMPLETE)
     }
 }
 
